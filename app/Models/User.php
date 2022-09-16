@@ -39,4 +39,21 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+
+    protected $appends = ['initial'];
+
+    public function getInitialAttribute()
+    {
+        $collection = str()->of($this->attributes['name'])->explode(' ');
+
+        if ($collection->count() < 2) {
+            return str()->of($this->attributes['name'])->substr(0, 2)->upper()->toString();
+        }
+
+        $first = str()->of($collection->first())->substr(0, 1)->upper();
+        $last = str()->of($collection->last())->substr(0, 1)->upper();
+
+        return $first . $last;
+    }
 }
